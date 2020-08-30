@@ -1,22 +1,11 @@
 import pandas as pd
 import numpy as np
-import os
-import keras
-import matplotlib.pyplot as plt
-from sklearn import preprocessing
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import Conv1D,MaxPool1D,Bidirectional,LSTM,Dropout
 from keras.layers import Dense,GlobalAveragePooling2D
-from keras.applications import MobileNetV2
-from keras.preprocessing import image
-from keras.applications.mobilenet import preprocess_input
-from keras.preprocessing.image import ImageDataGenerator
-from keras.models import Model
-from keras.optimizers import Adam
-filename = 'TSLA'
+filename = 'AAPL'
 stock = pd.read_csv('Data/' + filename + '.csv')
-stock2 = stock
 # scaler = preprocessing.StandardScaler()
 # scaled_values = scaler.fit_transform(stock.iloc[:,1:])
 # stock.iloc[:,1:] = scaled_values
@@ -30,16 +19,15 @@ for i in range(0 , len(stock) - window_size -week , 1):
     temp = []
     temp2 = []
     for j in range(window_size):
-        temp.append((stock2.iloc[i + j, 4] - first) / first)
+        temp.append((stock.iloc[i + j, 4] - first) / first)
     for j in range(week):
-        temp2.append((stock2.iloc[i + j, 4] - first) / first)
+        temp2.append((stock.iloc[i +window_size+ j, 4] - first) / first)
     # X.append(np.array(stock2.iloc[i:i+window_size,4]).reshape(50,1))
     #Y.append(np.array(stock2.iloc[i+window_size:i+window_size+week,4]).reshape(week,1))
     # print(stock2.iloc[i:i+window_size,4])
-    print(temp)
     X.append(np.array(temp).reshape(50, 1))
-    Y.append(np.array(stock2.iloc[i+window_size:i+window_size+week,4]).reshape(week,1))
-train_X,valid_X,train_label,valid_label = train_test_split(X, Y, test_size=0.3, random_state=13,shuffle=True)
+    Y.append(np.array(temp2).reshape(week,1))
+train_X,valid_X,train_label,valid_label = train_test_split(X, Y, test_size=0.2,shuffle=False)
 train_X = np.array(train_X)
 valid_X = np.array(valid_X)
 train_label = np.array(train_label)
