@@ -41,7 +41,6 @@ scaler = preprocessing.MinMaxScaler()
 scaled_values = scaler.fit_transform(stock.iloc[:,5:])
 stock.iloc[:,5:] = scaled_values
 window_size = 50
-week = 7
 X = []
 Y = []
 
@@ -54,11 +53,11 @@ for i,v in enumerate(importance):
 	print('Feature: %0d, Score: %.5f' % (i,v))
 plt.bar([Lstock.columns[x] for x in range(len(importance))], importance)
 plt.show()
-stock_final = Lstock.drop(['Open','Volume','rsi','bb_bbm','bb_bbh','bb_bbl','ichi_a','ichi_conv'],1)
+stock_final = Lstock.drop(['Open','Volume','Adj Close','rsi','bb_bbm','bb_bbh','bb_bbl','ichi_a','ichi_b','ichi_conv'],1)
 print(stock_final)
-for i in range(0 , len(stock) - window_size -week , 1):
-    X.append(np.array(stock_final.iloc[i:i+window_size,:]).reshape(300,1))
-    Y.append(np.array(stock.iloc[i+window_size:i+window_size+week,4]).reshape(week,1))
+for i in range(0 , len(stock_final) - window_size -1 , 1):
+    X.append(np.array(stock_final.iloc[i:i+window_size,:]).reshape(window_size*4,1))
+    Y.append(np.array(stock.iloc[i+window_size,4]).reshape(1,1))
 train_X,test_X,train_label,test_label = train_test_split(X, Y, test_size=0.1,shuffle=False)
 train_X = np.array(train_X)
 test_X = np.array(test_X)
@@ -71,8 +70,8 @@ model.add((LSTM(128,return_sequences=True)))
 model.add((LSTM(64,return_sequences=False)))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(1, activation='linear'))
-model.compile(optimizer='adam', loss='mse')
-model.fit(train_X, train_label, validation_split=0.2, epochs=100)
+model.compile(optimizer='RMSprop', loss='mse')
+model.fit(train_X, train_label, validation_data=(test_X,test_label), epochs=50,shuffle=False)
 print(model.evaluate(test_X,test_label))
 # model.summary()
 predicted  = model.predict(test_X)
