@@ -3,7 +3,8 @@ Stock market prediction by using CNN-LSTM neural network.
 full explanation is available at [1]. 
 this method uses normalization on whole data instead of window size normalization which paper proposes.
 using more features makes an improvement to the accuracy as the following pictures show the difference between using 1 and 6 features:
-
+<img src="1-F.png" width="400" height="300" />
+<img src="6-F.png" width="400" height="300" />
 ![Alt text](1-F.png =400x300)   ![Alt text](6-F.png =400x300)
 ## Reference 
 [1] Eapen, J., Bein, D., & Verma, A. (2019). Novel deep learning model with cnn
