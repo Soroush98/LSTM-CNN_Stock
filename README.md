@@ -1,7 +1,9 @@
 # LSTM-CNN_Stock
 Stock market prediction by using cnn-lstm neural network. 
-full implementation is available at [1]. 
+full explanation is available at [1]. 
 this method uses normalization on whole data instead of window size normalization which paper proposes.
+
+
 
 ## Reference 
 [1] Eapen, J., Bein, D., & Verma, A. (2019). Novel deep learning model with cnn
